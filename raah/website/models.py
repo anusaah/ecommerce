@@ -1,20 +1,28 @@
 from django.db import models
 
 # Create your models here.
-class Category(models.Model):
-    c_id = models.AutoField
-    c_name = models.CharField(max_length=50)
-
-class SubCategory(models.Model):
-    s_id = models.AutoField
-    c_id = models.ForeignKey(Category, on_delete=models.CASCADE)
-    size = models.CharField(max_length=10, default='')
-    color = models.CharField(max_length=50, default='')
+# class Category(models.Model):
+#     c_id = models.AutoField
+#     c_name = models.CharField(max_length=50)
+#
+#     def __str__(self):
+#         return self.c_name
+#
+# class SubCategory(models.Model):
+#     s_id = models.AutoField
+#     c_id = models.ForeignKey(Category, on_delete=models.CASCADE)
+#     size = models.CharField(max_length=10, default='')
+#
+#     def __str__(self):
+#         return self.size
 
 class Product(models.Model):
     product_id = models.AutoField
     product_name = models.CharField(max_length=50)
-    s_id = models.ForeignKey(SubCategory, on_delete=models.CASCADE, default='')
+    category = models.CharField(max_length=50, default='')
+    size = models.CharField(max_length=10, default='')
+    color = models.CharField(max_length=10, default='')
+    # s_id = models.ForeignKey(SubCategory, on_delete=models.CASCADE, default='')
     desc = models.CharField(max_length=300)
     price = models.IntegerField(default=0)
     image = models.ImageField(upload_to='static/website/images', blank=True, null=True)
