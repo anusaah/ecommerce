@@ -3,10 +3,10 @@ from .models import Product
 
 
 # Create your views here.
-def index(request,product_id=1):
-    products = Product.objects.get(id=product_id)
-    context = {'products': products}
-    return render(request, 'index.html', context)
+def index(request):
+    products = Product.objects.all()
+    
+    return render(request, 'index.html', {'products': products})
 
 def contact(request):
         return render(request, 'contact.html', {})
