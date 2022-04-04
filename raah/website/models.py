@@ -18,6 +18,7 @@ from django.db import models
 
 class Product(models.Model):
     product_id = models.AutoField
+    reference_id = models.IntegerField(default=0)
     product_name = models.CharField(max_length=50)
     category = models.CharField(max_length=50, default='')
     size = models.CharField(max_length=10, default='')

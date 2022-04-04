@@ -8,4 +8,5 @@ urlpatterns = [
     path('product.html', views.product, name='product'),
     path('about.html', views.about, name='about'),
     path('cart.html', views.cart, name='cart'),
+    path('product1.html', views.product1, name='product1'),
 ]

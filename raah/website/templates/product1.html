@@ -1,9 +1,8 @@
-{% extends "base.html" %}
 {% load static %}
 
 {% block content %}
 
-<!-- Product -->
+<!-- Product 1 -->
 <section class="bg0 p-b-140">
     <div class="container">
         <div class="flex-w flex-sb-m p-b-52">
@@ -263,7 +262,7 @@
                         <img src="{{product.image}}" alt="IMG-PRODUCT"/>
 
                         <a href="javascript:void(0);"
-                           class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04"
+                           class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-modal1"
                            onclick="showProductModal(event,{{product.reference_id}});"
                         >
                             Quick View
@@ -306,8 +305,8 @@
                 <div class="overlay-modal1 js-hide-modal1"></div>
                 <div class="container">
                     <div class="bg0 p-t-60 p-b-30 p-lr-15-lg how-pos3-parent">
-                        <button class="how-pos3 hov3 trans-04 js-hide-modal1"
-                                 onclick="hideProductModal(event,{{product.reference_id}});">
+                        <button class="how-pos3 hov3 trans-04"
+                                onclick="hideProductModal(event,{{product.reference_id}});">
                             <img src="{% static 'website/images/icons/icon-close.png' %}" alt="CLOSE"/>
                         </button>
 
