@@ -138,17 +138,19 @@
                     border: 3px solid #555;
                     }
                 } */
-
-
-
-
-
-
     </style>
 </head>
+{% for message in messages %}
+    <!--alert message in form-->
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message: </strong> {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
 <body class="animsition">
 <!-- Header -->
 <header>
+
     <!-- Header desktop -->
     <div class="container-menu-desktop">
         <!-- Topbar -->
@@ -458,7 +460,6 @@
 
 {% endblock %}
 
-
 <!-- Back to top -->
 <div class="btn-back-to-top" id="myBtn">
   <span class="symbol-btn-back-to-top">
@@ -634,17 +635,18 @@
                         <button type="button" class="close account-close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <div class="user signinBx">
+                        <div class="user signinBx" id="logModal">
                             <div class="imgBx">
                                 <img src="{% static 'website/images\log2.jpg' %}" alt="">
                             </div>
                             <div class="formBx">
-                                <form action="" onsubmit="return false;">
-
+                                <form action="/signin" method="post">
+                                    {% csrf_token %}
                                     <h2>Sign In</h2>
-                                    <input type="email" placeholder="Email-address" class="form-control my-3 p-3/">
-                                    <input type="password" name="password" placeholder="Password"
-                                           class="form-control my-3 p-3/">
+                                    <input type="email" id="loginemail" name="email" placeholder="Enter your email"
+                                           class="form-control my-3 p-3/" required>
+                                    <input type="password" id="pass" name="pass" placeholder="Enter your password"
+                                           class="form-control my-3 p-3/" required>
                                     <button type="button" class="login-btn mt-3 mb-5">Login</button>
                                     <p class="signup">
                                         Don't have an account?
@@ -653,24 +655,27 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="user signupBx">
+                        <div class="user signupBx" id="signupModal">
                             <div class="formBx">
-                                <form action="" onsubmit="return false;">
+                                <form action="/signup" method="post">
+                                    {% csrf_token %}
                                     <h2>Create an account</h2>
-                                    <input type="text" name="" placeholder="Username" class="form-control my-3 p-3/">
-                                    <input type="email" name="" placeholder="Email Address"
-                                           class="form-control my-3 p-3/">
-                                    <input type="password" name="" placeholder="Create Password"
-                                           class="form-control my-3 p-3/">
-                                    <input type="password" name="" placeholder="Confirm Password"
-                                           class="form-control my-3 p-3/">
-                                    <input type="text" name="" placeholder="Address" class="form-control my-3 p-3/">
-                                    <input type="text" name="" placeholder="Phone Number"
-                                           class="form-control my-3 p-3/">
-                                    <button type="button" class="login-btn mt-3 mb-5">Sign</button>
+                                    <input type="text" id="username" name="username" placeholder="Username"
+                                           class="form-control my-3 p-3/" required>
+                                    <input type="text" id="fname" name="fname" placeholder="First Name"
+                                           class="form-control my-3 p-3/" required>
+                                    <input type="text" id="lname" name="lname" placeholder="Last Name"
+                                           class="form-control my-3 p-3/" required>
+                                    <input type="email" id="email" name="email" placeholder="Email Address"
+                                           class="form-control my-3 p-3/" required>
+                                    <input type="password" id="pass1" name="pass1" placeholder="Create Password"
+                                           class="form-control my-3 p-3/" required>
+                                    <input type="password" id="pass2" name="pass2" placeholder="Confirm Password"
+                                           class="form-control my-3 p-3/" required>
+                                    <button type="submit" class="login-btn mt-3 mb-5">Sign In</button>
                                     <p class="signup">
                                         Already have an account ?
-                                        <a href="#" onclick="toggleForm();">Sign in.</a>
+                                        <a href="#" onclick="toggleForm();">Sign Up.</a>
                                     </p>
                                 </form>
                             </div>
@@ -709,6 +714,7 @@
 
 
 
+
 </script>
 <!--===============================================================================================-->
 <script src="{% static 'website/vendor/daterangepicker/moment.min.js' %}"></script>
@@ -720,6 +726,7 @@
 <script src="{% static 'website/vendor/parallax100/parallax100.js' %}"></script>
 <script>
       $(".parallax100").parallax100();
+
 
 
 
@@ -741,6 +748,7 @@
           mainClass: "mfp-fade",
         });
       });
+
 
 
 
@@ -803,6 +811,7 @@
 
 
 
+
 </script>
 <!--===============================================================================================-->
 <script src="{% static 'website/vendor/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
@@ -838,6 +847,7 @@
                 $("header").removeClass('header-v4');
             }
      });
+
 
 </script>
 <!--===============================================================================================-->
