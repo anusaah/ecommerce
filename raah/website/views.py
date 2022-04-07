@@ -1,9 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models import Product
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User, auth
 from django.contrib import messages
-
 
 # Create your views here.
 # def base(request):
@@ -60,6 +60,31 @@ def handleSignup(request):
         #or you can also writereturn redirect('/')
     else:
         return HttpResponse('404 - Not Found')
+
+def handleLogin(request):
+    if request.method == 'POST':
+        #Get the post parameters
+        loginusername = request.POST['loginusername']
+        loginpass = request.POST['loginpass']
+
+        user = authenticate(username=loginusername,
+        password=loginpass)
+
+        if user is not None:
+            auth.login(request, user)
+            messages.success(request, "Succesfully Logged In")
+            return redirect('index')
+        else:
+            messages.error(request, "Invalid credentials, Please try again")
+            return redirect('index')
+
+    return HttpResponse('404 - Not Found')
+
+def handleLogout(request):
+    logout(request)
+    messages.success(request, "Successfully Logged Out")
+    return redirect('index')
+
 
 def index(request):
     products = Product.objects.all
