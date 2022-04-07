@@ -1976,7 +1976,9 @@ input.num-product::-webkit-inner-spin-button {
   line-height: 1.6;
 }
 
-
+.nav-link{
+color:black;
+}
 
 /*//////////////////////////////////////////////////////////////////
 [ Block1 ]*/
