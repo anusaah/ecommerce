@@ -71,7 +71,7 @@ def handleLogin(request):
         password=loginpass)
 
         if user is not None:
-            auth.login(request, user)
+            login(request)
             messages.success(request, "Succesfully Logged In")
             return redirect('index')
         else:
