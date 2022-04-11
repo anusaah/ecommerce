@@ -138,14 +138,6 @@
                     border: 3px solid #555;
                     }
                 } */
-
-
-
-
-
-
-
-
     </style>
 </head>
 {% for message in messages %}
@@ -172,15 +164,15 @@
                     Free shipping for standard order over Rs 2000
                 </div>
 
-                <div class="right-top-bar flex-w h-full">
-                    <a href="#" class="flex-c-m trans-04 p-lr-25"> Help & FAQs </a>
+<!--                <div class="right-top-bar flex-w h-full">-->
+<!--                    <a href="#" class="flex-c-m trans-04 p-lr-25"> Help & FAQs </a>-->
 
-                    <a href="#" class="flex-c-m trans-04 p-lr-25" data-target="#loginModal"> My Account </a>
+<!--                    <a href="#" class="flex-c-m trans-04 p-lr-25" data-target="#loginModal"> My Account </a>-->
 
-                    <a href="#" class="flex-c-m trans-04 p-lr-25"> EN </a>
+<!--                    <a href="#" class="flex-c-m trans-04 p-lr-25"> EN </a>-->
 
-                    <a href="#" class="flex-c-m trans-04 p-lr-25"> USD </a>
-                </div>
+<!--                    <a href="#" class="flex-c-m trans-04 p-lr-25"> USD </a>-->
+<!--                </div>-->
             </div>
         </div>
 
@@ -238,7 +230,7 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle m-l-10" href="#" id="navbarDropdown" role="button"
                                    data-toggle="dropdown" aria-expanded="false">
-                                    Welcome {{request.user}}
+                                    Welcome
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="/logout">Logout</a>
@@ -314,15 +306,15 @@
             </li>
 
             <li>
-                <div class="right-top-bar flex-w h-full">
-                    <a href="#" class="flex-c-m p-lr-10 trans-04"> Help & FAQs </a>
+<!--                <div class="right-top-bar flex-w h-full">-->
+<!--                    <a href="#" class="flex-c-m p-lr-10 trans-04"> Help & FAQs </a>-->
 
-                    <a href="#" class="flex-c-m p-lr-10 trans-04"> My Account </a>
+<!--                    <a href="#" class="flex-c-m p-lr-10 trans-04"> My Account </a>-->
 
-                    <a href="#" class="flex-c-m p-lr-10 trans-04"> EN </a>
+<!--                    <a href="#" class="flex-c-m p-lr-10 trans-04"> EN </a>-->
 
-                    <a href="#" class="flex-c-m p-lr-10 trans-04"> USD </a>
-                </div>
+<!--                    <a href="#" class="flex-c-m p-lr-10 trans-04"> USD </a>-->
+<!--                </div>-->
             </li>
         </ul>
 
@@ -399,7 +391,7 @@
             <ul class="header-cart-wrapitem w-full">
                 <li class="header-cart-item flex-w flex-t m-b-12">
                     <div class="header-cart-item-img">
-                        <img src="{% static 'website/images/item-cart-01.jpg' %}" alt="IMG"/>
+                        <img src="{% static 'website/images/product32.jpg' %}" alt="IMG"/>
                     </div>
 
                     <div class="header-cart-item-txt p-t-8">
@@ -407,16 +399,16 @@
                                 href="#"
                                 class="header-cart-item-name m-b-18 hov-cl1 trans-04"
                         >
-                            White Shirt Pleat
+                            Mandala t-shirt
                         </a>
 
-                        <span class="header-cart-item-info"> 1 x $19.00 </span>
+                        <span class="header-cart-item-info"> 1 x Rs 500 </span>
                     </div>
                 </li>
 
                 <li class="header-cart-item flex-w flex-t m-b-12">
                     <div class="header-cart-item-img">
-                        <img src="{% static 'website/images/item-cart-02.jpg' %}" alt="IMG"/>
+                        <img src="{% static 'website/images/product9.jpg' %}" alt="IMG"/>
                     </div>
 
                     <div class="header-cart-item-txt p-t-8">
@@ -424,27 +416,10 @@
                                 href="#"
                                 class="header-cart-item-name m-b-18 hov-cl1 trans-04"
                         >
-                            Converse All Star
+                            Happy anniversary cushion
                         </a>
 
-                        <span class="header-cart-item-info"> 1 x $39.00 </span>
-                    </div>
-                </li>
-
-                <li class="header-cart-item flex-w flex-t m-b-12">
-                    <div class="header-cart-item-img">
-                        <img src="{% static 'website/images/item-cart-03.jpg' %}" alt="IMG"/>
-                    </div>
-
-                    <div class="header-cart-item-txt p-t-8">
-                        <a
-                                href="#"
-                                class="header-cart-item-name m-b-18 hov-cl1 trans-04"
-                        >
-                            Nixon Porter Leather
-                        </a>
-
-                        <span class="header-cart-item-info"> 1 x $17.00 </span>
+                        <span class="header-cart-item-info"> 1 x Rs. 450</span>
                     </div>
                 </li>
             </ul>
@@ -846,7 +821,22 @@
 <!--===============================================================================================-->
 <!--===============================================================================================-->
 <script src="{% static 'website/js/main.js' %}"></script>
-
+{% block js %}
+<script>
+    console.log('working')
+    if(localStorage.getItem('cart') == null){
+        var cart ={};
+    }
+    else{
+        cart = JSON.parse(localStorage.getItem('cart')
+    }
+    $(.'cart).click(function(){
+        console.log('clicked')
+    });
+</script>
+{% endblock %}
+</body>
+</html>
 
 
 
