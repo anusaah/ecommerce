@@ -138,7 +138,38 @@
                     border: 3px solid #555;
                     }
                 } */
+
+
+
+
+
+
     </style>
+    <script>
+        let user = "{{request.user}}"
+        function getCookie(name) {
+         let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+
+
+
+
+
+    </script>
 </head>
 {% for message in messages %}
 <!--alert message in form-->
@@ -164,15 +195,15 @@
                     Free shipping for standard order over Rs 2000
                 </div>
 
-<!--                <div class="right-top-bar flex-w h-full">-->
-<!--                    <a href="#" class="flex-c-m trans-04 p-lr-25"> Help & FAQs </a>-->
+                <!--                <div class="right-top-bar flex-w h-full">-->
+                <!--                    <a href="#" class="flex-c-m trans-04 p-lr-25"> Help & FAQs </a>-->
 
-<!--                    <a href="#" class="flex-c-m trans-04 p-lr-25" data-target="#loginModal"> My Account </a>-->
+                <!--                    <a href="#" class="flex-c-m trans-04 p-lr-25" data-target="#loginModal"> My Account </a>-->
 
-<!--                    <a href="#" class="flex-c-m trans-04 p-lr-25"> EN </a>-->
+                <!--                    <a href="#" class="flex-c-m trans-04 p-lr-25"> EN </a>-->
 
-<!--                    <a href="#" class="flex-c-m trans-04 p-lr-25"> USD </a>-->
-<!--                </div>-->
+                <!--                    <a href="#" class="flex-c-m trans-04 p-lr-25"> USD </a>-->
+                <!--                </div>-->
             </div>
         </div>
 
@@ -188,18 +219,18 @@
                 <div class="menu-desktop">
                     <ul class="main-menu">
                         <li>
-                            <a href="index.html">Home</a>
+                            <a href="{% url 'index' %}">Home</a>
                         </li>
 
                         <li>
-                            <a href="product.html">Shop</a>
+                            <a href="{% url 'product' %}">Shop</a>
                         </li>
                         <li>
-                            <a href="about.html">About</a>
+                            <a href="{% url 'about' %}">About</a>
                         </li>
 
                         <li>
-                            <a href="contact.html">Contact</a>
+                            <a href="{% url 'contact' %}">Contact</a>
                         </li>
                     </ul>
                 </div>
@@ -230,7 +261,7 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle m-l-10" href="#" id="navbarDropdown" role="button"
                                    data-toggle="dropdown" aria-expanded="false">
-                                    Welcome
+                                    Welcome {{user}}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="/logout">Logout</a>
@@ -306,15 +337,15 @@
             </li>
 
             <li>
-<!--                <div class="right-top-bar flex-w h-full">-->
-<!--                    <a href="#" class="flex-c-m p-lr-10 trans-04"> Help & FAQs </a>-->
+                <!--                <div class="right-top-bar flex-w h-full">-->
+                <!--                    <a href="#" class="flex-c-m p-lr-10 trans-04"> Help & FAQs </a>-->
 
-<!--                    <a href="#" class="flex-c-m p-lr-10 trans-04"> My Account </a>-->
+                <!--                    <a href="#" class="flex-c-m p-lr-10 trans-04"> My Account </a>-->
 
-<!--                    <a href="#" class="flex-c-m p-lr-10 trans-04"> EN </a>-->
+                <!--                    <a href="#" class="flex-c-m p-lr-10 trans-04"> EN </a>-->
 
-<!--                    <a href="#" class="flex-c-m p-lr-10 trans-04"> USD </a>-->
-<!--                </div>-->
+                <!--                    <a href="#" class="flex-c-m p-lr-10 trans-04"> USD </a>-->
+                <!--                </div>-->
             </li>
         </ul>
 
@@ -425,18 +456,18 @@
             </ul>
 
             <div class="w-full">
-                <div class="header-cart-total w-full p-tb-40">Total: $75.00</div>
+                <div class="header-cart-total w-full p-tb-40">Total: ${{cart.get_cart_total}}</div>
 
                 <div class="header-cart-buttons flex-w w-full">
                     <a
-                            href="cart.html"
+                            href="{% url 'cart' %}"
                             class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10"
                     >
                         View Cart
                     </a>
 
                     <a
-                            href="cart.html"
+                            href="{% url 'cart' %}"
                             class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10"
                     >
                         Check Out
@@ -695,14 +726,6 @@
 <!--===============================================================================================-->
 <script src="{% static 'website/vendor/select2/select2.min.js' %}"></script>
 <script src="{% static 'website/js/form.js' %}"></script>
-<script>
-      $(".js-select2").each(function () {
-        $(this).select2({
-          minimumResultsForSearch: 20,
-          dropdownParent: $(this).next(".dropDownSelect2"),
-        });
-      });
-</script>
 <!--===============================================================================================-->
 <script src="{% static 'website/vendor/daterangepicker/moment.min.js' %}"></script>
 <script src="{% static 'website/vendor/daterangepicker/daterangepicker.js' %}"></script>
@@ -711,12 +734,33 @@
 <script src="{% static 'website/js/slick-custom.js' %}"></script>
 <!--===============================================================================================-->
 <script src="{% static 'website/vendor/parallax100/parallax100.js' %}"></script>
-<script>
-      $(".parallax100").parallax100();
-</script>
 <!--===============================================================================================-->
 <script src="{% static 'website/vendor/MagnificPopup/jquery.magnific-popup.min.js' %}"></script>
-<script>
+<!--===============================================================================================-->
+<script src="{% static 'website/vendor/isotope/isotope.pkgd.min.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'website/vendor/sweetalert/sweetalert.min.js' %}"></script>
+<!--===============================================================================================-->
+<script src="{% static 'website/vendor/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+
+<!--===============================================================================================-->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKFWBqlKAGCeS1rMVoaNlwyayu0e0YRes"></script>
+<script src="{% static 'website/js/map-custom.js' %}"></script>
+<!--===============================================================================================-->
+<!--===============================================================================================-->
+<script src="{% static 'website/js/main.js' %}"></script>
+<script src="{% static 'website/js/cart.js' %}"></script>
+{% block js %}
+<script type="text/javascript">
+      $(".js-select2").each(function () {
+        $(this).select2({
+          minimumResultsForSearch: 20,
+          dropdownParent: $(this).next(".dropDownSelect2"),
+        });
+      });
+
+      $(".parallax100").parallax100();
+
       $(".gallery-lb").each(function () {
         // the containers for all your galleries
         $(this).magnificPopup({
@@ -728,15 +772,42 @@
           mainClass: "mfp-fade",
         });
       });
-</script>
-<!--===============================================================================================-->
-<script src="{% static 'website/vendor/isotope/isotope.pkgd.min.js' %}"></script>
-<!--===============================================================================================-->
-<script src="{% static 'website/vendor/sweetalert/sweetalert.min.js' %}"></script>
-<script>
-      $(".js-addwish-b2").on("click", function (e) {
-        e.preventDefault();
+
+      $(".js-pscroll").each(function () {
+        $(this).css("position", "relative");
+        $(this).css("overflow", "hidden");
+        var ps = new PerfectScrollbar(this, {
+          wheelSpeed: 1,
+          scrollingThreshold: 1000,
+          wheelPropagation: false,
+        });
+
+        $(window).on("resize", function () {
+          ps.update();
+        });
       });
+
+      function showProductModal(event,productId){
+            event.preventDefault();
+            $('.js-modal'+productId).addClass('show-modal1');
+      }
+
+      function hideProductModal(event,productId){
+           event.preventDefault();
+           $('.js-modal'+productId).removeClass('show-modal1');
+      }
+
+     $(document).ready(function() {
+            if(window.location.pathname!=='/index.html'){
+                $("header").addClass('header-v4');
+            }else{
+                $("header").removeClass('header-v4');
+            }
+     });
+
+     $(".js-addwish-b2").on("click", function (e) {
+        e.preventDefault();
+     });
 
       $(".js-addwish-b2").each(function () {
         var nameProduct = $(this).parent().parent().find(".js-name-b2").html();
@@ -779,60 +850,17 @@
         });
       });
 
-</script>
-<!--===============================================================================================-->
-<script src="{% static 'website/vendor/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
-<script type="text/javascript">
-      $(".js-pscroll").each(function () {
-        $(this).css("position", "relative");
-        $(this).css("overflow", "hidden");
-        var ps = new PerfectScrollbar(this, {
-          wheelSpeed: 1,
-          scrollingThreshold: 1000,
-          wheelPropagation: false,
-        });
-
-        $(window).on("resize", function () {
-          ps.update();
-        });
-      });
-
-      function showProductModal(event,productId){
-            event.preventDefault();
-            $('.js-modal'+productId).addClass('show-modal1');
-      }
-
-      function hideProductModal(event,productId){
-           event.preventDefault();
-           $('.js-modal'+productId).removeClass('show-modal1');
-      }
-
-     $(document).ready(function() {
-            if(window.location.pathname!=='/index.html'){
-                $("header").addClass('header-v4');
-            }else{
-                $("header").removeClass('header-v4');
-            }
-     });
-</script>
-<!--===============================================================================================-->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKFWBqlKAGCeS1rMVoaNlwyayu0e0YRes"></script>
-<script src="{% static 'website/js/map-custom.js' %}"></script>
-<!--===============================================================================================-->
-<!--===============================================================================================-->
-<script src="{% static 'website/js/main.js' %}"></script>
-{% block js %}
-<script>
-    console.log('working')
     if(localStorage.getItem('cart') == null){
         var cart ={};
     }
     else{
-        cart = JSON.parse(localStorage.getItem('cart')
+        cart = JSON.parse(localStorage.getItem('cart'));
     }
-    $(.'cart).click(function(){
+
+    $('.cart').click(function(){
         console.log('clicked')
     });
+
 </script>
 {% endblock %}
 </body>

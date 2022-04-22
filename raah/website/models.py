@@ -1,4 +1,8 @@
+import uuid
+
+from django.contrib.auth.models import User
 from django.db import models
+
 
 # Create your models here.
 # class Category(models.Model):
@@ -31,21 +35,61 @@ class Product(models.Model):
     def __str__(self):
         return self.product_name
 
-class Customer(models.Model):
-    customer_id = models.AutoField
-    username = models.CharField(max_length=50)
-    email = models.CharField(max_length=200)
-    password = models.CharField(max_length=50)
-    address = models.CharField(max_length=100)
-    phno = models.IntegerField()
+
+# class Customer(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=50, default='')
+#     email = models.CharField(max_length=200)
+#
+#     def __str__(self):
+#         return str(self.name)
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
+    cart_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    completed = models.BooleanField(default=False)
+
+    @property
+    def get_cart_total(self):
+        cartitems = self.cartitems_set.all()
+        total = sum([item.get_total for item in cartitems])
+        return total
+
+    @property
+    def get_itemtotal(self):
+        cartitems = self.cartitems_set.all()
+        total = sum([item.quantity for item in cartitems])
+        return total
 
     def __str__(self):
-        return self.username
+        return str(self.id)
+
+
+class CartItems(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, default='')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
+
+    @property
+    def get_total(self):
+        total = self.quantity * self.product.price
+        if total == 0:
+            self.delete()
+        return total
+
+    def __str__(self):
+        return self.product.product_name
+
 
 class Order(models.Model):
     order_id = models.AutoField
-    customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     total = models.IntegerField(default=0)
     order_date = models.DateField(auto_now=True, blank=False)
+    address = models.CharField(max_length=100, default='')
+    phno = models.IntegerField(default='')
+
+    def __str__(self):
+        return self.address
