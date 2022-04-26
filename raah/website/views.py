@@ -1,10 +1,11 @@
 import json
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from .models import Product, Cart, CartItems
+from .models import Product, Cart, CartItems, Order
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
+from datetime import date
 
 
 # Create your views here.
@@ -101,35 +102,66 @@ def search(request):
     prod = [content for content in products if searchMatch(query in content.desc)]
 
 
+def base():
+    if request.user.is_authenticated:
+        user = request.user;
+        cart, created = Cart.objects.get_or_create(user=user, completed=False)
+        cartitems = cart.cartitems_set.all()
+    return render(request, 'base.html', {'cart': cart, 'cartitems': cartitems})
+
+
 def index(request):
     products = Product.objects.all
-    content = {'productList': products}
+    cart = []
+    cartitems = []
+    if request.user.is_authenticated:
+        user = request.user;
+        cart, created = Cart.objects.get_or_create(user=user, completed=False)
+        cartitems = cart.cartitems_set.all()
+    content = {'productList': products, 'cart': cart, 'cartitems': cartitems}
     return render(request, 'index.html', content)
 
 
 def contact(request):
-    return render(request, 'contact.html', {})
+    cart = []
+    cartitems = []
+    if request.user.is_authenticated:
+        user = request.user;
+        cart, created = Cart.objects.get_or_create(user=user, completed=False)
+        cartitems = cart.cartitems_set.all()
+    content = {'cart': cart, 'cartitems': cartitems}
+    return render(request, 'contact.html', content)
 
 
 # def login(request):
 #     return render(request, 'login.html', {})
 
 def product(request):
-    # if request.user.is_authenticated:
-    #     user_id = request.user
-    #     cart, created = Cart.objects.get_or_create(user_id=user_id, completed=False),
-    #     cartitems = cart.cartitems_set.all()
-
+    cart = []
+    cartitems = []
+    if request.user.is_authenticated:
+        user = request.user;
+        cart, created = Cart.objects.get_or_create(user=user, completed=False)
+        cartitems = cart.cartitems_set.all()
     products = Product.objects.all
-    content = {'productList': products, 'cart': cart}
+    content = {'productList': products, 'cart': cart, 'cartitems': cartitems}
     return render(request, 'product.html', content)
 
 
 def about(request):
-    return render(request, 'about.html', {})
+    cart = []
+    cartitems = []
+    if request.user.is_authenticated:
+        user = request.user;
+        cart, created = Cart.objects.get_or_create(user=user, completed=False)
+        cartitems = cart.cartitems_set.all()
+    content = {'cart': cart, 'cartitems': cartitems}
+    return render(request, 'about.html', content)
 
 
 def cart(request):
+    cart = []
+    cartitems = []
     if request.user.is_authenticated:
         user = request.user;
         cart, created = Cart.objects.get_or_create(user=user, completed=False)
@@ -145,15 +177,16 @@ def product1(request):
 def updateCart(request):
     data = json.loads(request.body)
     productId = data["productId"]
+    quantity = data["quantity"]
+    print(quantity)
     action = data["action"]
     product = Product.objects.get(id=productId)
     user = request.user
-    print(f"User: {user}")
     cart, created = Cart.objects.get_or_create(user=user, completed=False)
     cartitem, created = CartItems.objects.get_or_create(cart=cart, product=product)
 
     if action == "add":
-        cartitem.quantity += 1
+        cartitem.quantity = quantity
         cartitem.save()
 
     return JsonResponse("Cart Updated", safe=False)
@@ -167,3 +200,33 @@ def updateQuantity(request):
     product.quantity = quantityFieldValue
     product.save()
     return JsonResponse("Qunatity updated", safe=False)
+
+
+def checkout(request, ):
+    today = date.today()
+    if request.method == "POST":
+        cart_id = request.POST.get('cartId', '')
+        address = request.POST.get('address', '')
+        phone = request.POST.get('phone', '')
+        # total = CartItems.objects.get(get_total)
+        order_date = today.strftime("%b-%d-%Y")
+        user_id = request.user
+        print(order_date)
+        print(cart_id)
+        order = Order(cart_id=cart_id, user_id=user_id, address=address, phone=phone, order_date=order_date)
+        order.save()
+        thank = True
+        id = Order.order_id
+        return render(request, 'cart.html', {'thank': thank, 'id': id})
+    return render(request, 'cart.html')
+
+
+def deletecartitem(request, id):
+    try:
+        cartitem = CartItems.objects.get(id=id)
+    except:
+        return redirect('index')
+
+        cartitem = CartItems.objects.get(id=id)
+        cartitem.delete()
+        cartitem.save()

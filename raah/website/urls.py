@@ -13,5 +13,7 @@ urlpatterns = [
     path('product1.html', views.product1, name='product1'),
     path('signup', views.handleSignup, name='handleSignup'),
     path('login', views.handleLogin, name='handleLogin'),
+    path('checkout', views.checkout, name='checkout'),
     path('logout', views.handleLogout, name='handleLogout'),
+    path('delete-cart-item', views.deletecartitem, name="deletecartitem")
 ]

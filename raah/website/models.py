@@ -70,6 +70,7 @@ class CartItems(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
 
+
     @property
     def get_total(self):
         total = self.quantity * self.product.price
@@ -83,13 +84,13 @@ class CartItems(models.Model):
 
 class Order(models.Model):
     order_id = models.AutoField
+    cart_id = models.CharField(max_length=5000, default='')
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, default='')
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
+    # quantity = models.IntegerField()
     total = models.IntegerField(default=0)
     order_date = models.DateField(auto_now=True, blank=False)
     address = models.CharField(max_length=100, default='')
-    phno = models.IntegerField(default='')
+    phone = models.IntegerField(default='')
 
     def __str__(self):
         return self.address
