@@ -66,6 +66,7 @@ class Cart(models.Model):
 
 
 class CartItems(models.Model):
+    cartItems_id = models.AutoField
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, default='')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
@@ -79,12 +80,12 @@ class CartItems(models.Model):
         return total
 
     def __str__(self):
-        return self.product.product_name
+        return str(self.id) + ', ' + str(self.cart)
 
 
 class Order(models.Model):
     order_id = models.AutoField
-    cart_id = models.CharField(max_length=5000, default='')
+    cart_id = models.ForeignKey(Cart, on_delete=models.CASCADE, default='')
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     # quantity = models.IntegerField()
     total = models.IntegerField(default=0)
@@ -93,4 +94,15 @@ class Order(models.Model):
     phone = models.IntegerField(default='')
 
     def __str__(self):
-        return self.address
+        return str(self.id)
+
+class Contact(models.Model):
+    contact_id = models.AutoField
+    email = models.CharField(max_length=200)
+    msg = models.CharField(max_length=500)
+    msg_date = models.DateField(auto_now=True, blank=False)
+
+    def __str__(self):
+        return str(self.msg_date) + ', ' + str(self.email)
+
+

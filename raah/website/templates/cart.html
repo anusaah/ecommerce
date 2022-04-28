@@ -37,26 +37,26 @@
                                 {% for item in cartitems %}
                                 <tr class="table_row">
                                     <td class="column-1">
-                                        <div class="how-itemcart1 delete-cart-item">
+                                        <div class="how-itemcart1 delete-cart-item" data-cartItem="{{item.id}}">
                                             <img src="{{item.product.image.url}}" alt="IMG"/>
                                         </div>
                                     </td>
                                     <td class="column-2"> {{item.product.product_name}}</td>
                                     <td class="column-3">Rs. {{item.product.price}}</td>
                                     <td class="column-4 ">{{item.quantity}}</td>
-<!--                                        <div class="wrap-num-product flex-w m-l-auto m-r-0 quantity">-->
-<!--                                            <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">-->
-<!--                                                <i class="fs-16 zmdi zmdi-minus"></i>-->
-<!--                                            </div>-->
+                                    <!--                                        <div class="wrap-num-product flex-w m-l-auto m-r-0 quantity">-->
+                                    <!--                                            <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">-->
+                                    <!--                                                <i class="fs-16 zmdi zmdi-minus"></i>-->
+                                    <!--                                            </div>-->
 
-<!--                                            <input class="mtext-104 cl3 txt-center num-product quantity" type="number"-->
-<!--                                                   id="num_product_{{product.reference_id}}"-->
-<!--                                                   name="num-product1" value="{{item.quantity}}">-->
+                                    <!--                                            <input class="mtext-104 cl3 txt-center num-product quantity" type="number"-->
+                                    <!--                                                   id="num_product_{{product.reference_id}}"-->
+                                    <!--                                                   name="num-product1" value="{{item.quantity}}">-->
 
-<!--                                            <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">-->
-<!--                                                <i class="fs-16 zmdi zmdi-plus"></i>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
+                                    <!--                                            <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">-->
+                                    <!--                                                <i class="fs-16 zmdi zmdi-plus"></i>-->
+                                    <!--                                            </div>-->
+                                    <!--                                        </div>-->
                                     <td class="column-5">Rs. {{item.get_total}}</td>
                                 </tr>
                                 {% endfor %}
@@ -145,7 +145,7 @@
 									</span>
 
                                     <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
-                                        <select class="js-select2" name="time">
+                                        <select class="js-select2" name="time" required>
                                             <option disabled selected>Payment method...</option>
                                             <option>Cash on delivery</option>
                                         </select>
@@ -200,16 +200,22 @@
 <!--===============================================================================================-->
 <script src="{% static 'website/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
 <!--==============================================================================================-->
-<script type="text/javascript">
-    $(document).ready(function () {
+
+{% block js %}
+<script>
         {% if thank %}
-            alert('Thanks for your order. Your order id is {{id}})
-            localStorage.clear()
-            document.location = "/index"
+                swal({
+                    title: "Success",
+                    text: "'Thanks for your order. Your order id is {{id}}.",
+                    icon: "success",
+                    type: "success"
+                }).then(function() {
+                     window.location.href="/product.html";
+                });
         {% endif %}
-    });
 
 </script>
+<{% endblock %}
 
 <{% endblock %}
 

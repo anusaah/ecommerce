@@ -1,7 +1,8 @@
 import json
+import uuid
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-from .models import Product, Cart, CartItems, Order
+from .models import Product, Cart, CartItems, Order, Contact
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
@@ -96,7 +97,8 @@ def serchMatch(query, content):
 
 
 def search(request):
-    query = request.GET.get('search')
+    q = request.GET['q']
+
     products = Product.objects.all
     content = {'productList': products}
     prod = [content for content in products if searchMatch(query in content.desc)]
@@ -130,6 +132,12 @@ def contact(request):
         cart, created = Cart.objects.get_or_create(user=user, completed=False)
         cartitems = cart.cartitems_set.all()
     content = {'cart': cart, 'cartitems': cartitems}
+
+    if request.method == 'POST':
+        email = request.POST['email']
+        msg = request.POST['msg']
+        contact = Contact(email=email, msg=msg)
+        contact.save()
     return render(request, 'contact.html', content)
 
 
@@ -166,7 +174,6 @@ def cart(request):
         user = request.user;
         cart, created = Cart.objects.get_or_create(user=user, completed=False)
         cartitems = cart.cartitems_set.all()
-
     return render(request, 'cart.html', {'cartitems': cartitems, 'cart': cart})
 
 
@@ -178,7 +185,6 @@ def updateCart(request):
     data = json.loads(request.body)
     productId = data["productId"]
     quantity = data["quantity"]
-    print(quantity)
     action = data["action"]
     product = Product.objects.get(id=productId)
     user = request.user
@@ -202,31 +208,32 @@ def updateQuantity(request):
     return JsonResponse("Qunatity updated", safe=False)
 
 
-def checkout(request, ):
+def checkout(request):
     today = date.today()
     if request.method == "POST":
         cart_id = request.POST.get('cartId', '')
+        cart = Cart.objects.get(id=cart_id)
         address = request.POST.get('address', '')
         phone = request.POST.get('phone', '')
-        # total = CartItems.objects.get(get_total)
+        cartItems = CartItems.objects.filter(cart_id=cart_id)
+        total = 0;
+        for ci in cartItems.iterator():
+            computedTotal = ci.product.price * ci.quantity;
+            total += computedTotal
         order_date = today.strftime("%b-%d-%Y")
         user_id = request.user
-        print(order_date)
-        print(cart_id)
-        order = Order(cart_id=cart_id, user_id=user_id, address=address, phone=phone, order_date=order_date)
+        order = Order(cart_id=cart, user_id=user_id, total=total, address=address, phone=phone,
+                      order_date=order_date)
         order.save()
+        cart.completed = True
+        cart.save()
         thank = True
-        id = Order.order_id
-        return render(request, 'cart.html', {'thank': thank, 'id': id})
+        return render(request, 'cart.html', {'thank': thank, 'id': order.id})
     return render(request, 'cart.html')
 
 
-def deletecartitem(request, id):
-    try:
-        cartitem = CartItems.objects.get(id=id)
-    except:
-        return redirect('index')
-
-        cartitem = CartItems.objects.get(id=id)
+def deletecartitem(request, cartItems_id):
+    if request.method == "POST":
+        cartitem = CartItems.objects.get(id=cartItems_id)
         cartitem.delete()
-        cartitem.save()
+    return redirect('index')

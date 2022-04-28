@@ -15,5 +15,5 @@ urlpatterns = [
     path('login', views.handleLogin, name='handleLogin'),
     path('checkout', views.checkout, name='checkout'),
     path('logout', views.handleLogout, name='handleLogout'),
-    path('delete-cart-item', views.deletecartitem, name="deletecartitem")
+    path('deletecartitem/<int:cartItems_id>', views.deletecartitem, name="deletecartitem")
 ]

@@ -139,6 +139,7 @@
                     }
                 } */
 
+
     </style>
     <script>
         let user = "{{request.user}}"
@@ -158,6 +159,7 @@
         return cookieValue;
     }
     const csrftoken = getCookie('csrftoken');
+
 
     </script>
 </head>
@@ -228,7 +230,7 @@
                 <!-- Icon header -->
                 <div class="ml-auto">
                     <div class="wrap-icon-header flex-w flex-r-m">
-                        <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search"
+                        <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search "
                         >
                             <i class="zmdi zmdi-search"></i>
                         </div>
@@ -404,7 +406,8 @@
             <ul class="header-cart-wrapitem w-full">
                 {% for item in cartitems %}
                 <li class="header-cart-item flex-w flex-t m-b-12">
-                    <div class="header-cart-item-img delete-cart-item">
+<!--                    <div class="header-cart-item-img delete-cart-item">-->
+                    <div class="how-itemcart1 delete-cart-item" data-cartItem="{{item.id}}">
                         <img src="{{item.product.image.url}}" alt="IMG"/>
                     </div>
 
@@ -437,7 +440,7 @@
                 <!--                    </div>-->
                 <!--                </li>-->
                 <!--            </ul>-->
-
+                {% if user.is_authenticated %}
                 <div class="w-full">
                     <div class="header-cart-total w-full p-tb-40">Total: Rs. {{cart.get_cart_total}}</div>
 
@@ -456,6 +459,9 @@
                             Check Out
                         </a>
                     </div>
+                    {% else %}
+                    <h4>Please Login first</h4>
+                    {% endif %}
                 </div>
         </div>
     </div>
@@ -810,8 +816,8 @@
           .find(".js-name-detail")
           .html();
 
-        $(this).on("click", function () {
-          swal(nameProduct, "is added to wishlist !", "success");
+        $(this).on("click", function () {swal
+          (nameProduct, "is added to wishlist !", "success");
 
           $(this).addClass("js-addedwish-detail");
           $(this).off("click");
@@ -829,7 +835,14 @@
           .find(".js-name-detail")
           .html();
         $(this).on("click", function () {
-          swal(nameProduct, "is added to cart !", "success");
+            swal({
+                    title: "Success",
+                    text: nameProduct + "is added to cart !",
+                    icon: "success",
+                    type: "success"
+                }).then(function() {
+                     window.location.href=window.location.href;
+                });
         });
       });
 
@@ -843,6 +856,7 @@
     $('.cart').click(function(){
         console.log('clicked')
     });
+
 
 
 </script>
