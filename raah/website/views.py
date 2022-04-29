@@ -6,7 +6,7 @@ from .models import Product, Cart, CartItems, Order, Contact
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
-from datetime import date
+from datetime import date, datetime
 
 
 # Create your views here.
@@ -134,9 +134,11 @@ def contact(request):
     content = {'cart': cart, 'cartitems': cartitems}
 
     if request.method == 'POST':
+        # now = datetime.now()
         email = request.POST['email']
         msg = request.POST['msg']
-        contact = Contact(email=email, msg=msg)
+        msg_date = datetime.today().strftime('%Y-%m-%d')
+        contact, created = Contact.objects.get_or_create(email=email, msg=msg, msg_date=msg_date)
         contact.save()
     return render(request, 'contact.html', content)
 
