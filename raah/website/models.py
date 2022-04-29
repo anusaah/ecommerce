@@ -80,7 +80,7 @@ class CartItems(models.Model):
         return total
 
     def __str__(self):
-        return str(self.id) + ', ' + str(self.cart)
+        return str(self.cart) + ', ' + str(self.product)
 
 
 class Order(models.Model):
