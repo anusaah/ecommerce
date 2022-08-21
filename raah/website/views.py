@@ -43,15 +43,15 @@ def handleSignup(request):
 
         # check for errorneous inputs
         if len(username) > 10:
-            messages.error(request, "Your username must be under 10 characters")
+            messages.warning(request, "Your username must be under 10 characters")
             return redirect('index')
 
         if not username.isalnum():
-            messages.error(request, "username should only contain letters and numbers")
+            messages.warning(request, "username should only contain letters and numbers")
             return redirect('index')
 
         if pass1 != pass2:
-            messages.error(request, "Password do not match")
+            messages.warning(request, "Password do not match")
             return redirect('index')
 
         # create user
